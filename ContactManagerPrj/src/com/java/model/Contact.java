@@ -1,14 +1,29 @@
 package com.java.model;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 public class Contact {
 
 	private Integer id;
+	
+	@NotEmpty(message = " Name is required")
 	private String name;
+	
+	@NotEmpty(message = " Email is required")
+	@Email(message = " Invalid Email")
 	private String email;
+	
+	@NotEmpty(message = " Address is required")
 	private String address;
+	
+	@NotEmpty(message = " Phone number is required")
+	@Size(min = 12, max = 12, message = " Size must be 12")
 	private String phone;
 
-	public Contact(){};
+	public Contact() {
+	};
 
 	public Contact(Integer id, String name, String email, String address, String phone) {
 		super();

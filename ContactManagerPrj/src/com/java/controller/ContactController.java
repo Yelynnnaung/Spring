@@ -2,9 +2,12 @@ package com.java.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +21,7 @@ public class ContactController {
 	@Autowired
 	private ContactDao contactDao;
 
-	@RequestMapping("/")
+	@RequestMapping(value = "/",method = RequestMethod.GET)
 	public String index(Model model) {
 		List<Contact> cList = contactDao.getList();
 		model.addAttribute("contactList", cList);
@@ -32,7 +35,10 @@ public class ContactController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String saveContact(@ModelAttribute Contact c) {
+	public String saveContact(@Valid @ModelAttribute Contact c, BindingResult br) {
+		if(br.hasErrors()){
+			return "createOrupdate";
+		}
 		if (c.getId() == null) {
 			contactDao.save(c);
 		} else {
