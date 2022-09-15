@@ -6,9 +6,25 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
+
+<script type="text/javascript">
+var Msg ='<%=session.getAttribute("message")%>';
+	if (Msg != "null") {
+		alert(Msg);
+	}
+	
+</script>
+
 </head>
 <body>
+
 	<div align="center">
+		<c:if test="${not empty message }">
+			<div
+				style="color: white; background-color: green; width: 300px; padding: 10px;">${message }
+			</div>
+		</c:if>
+		<c:remove var="message" scope="session" />
 		<h1>Contact List</h1>
 		<a href="new">Create New Contact</a><br> <br>
 		<table border="1">
@@ -27,8 +43,9 @@
 					<td>${contact.email }</td>
 					<td>${contact.address }</td>
 					<td>${contact.phone }</td>
-					<td><a href="edit/${contact.id }">Edit</a>&nbsp;&nbsp;
-						<a href="delete/${contact.id }" onclick="return confirm('Are you sure you want to delete?')" >Delete</a>
+					<td><a href="edit/${contact.id }">Edit</a>&nbsp;&nbsp; <a
+						href="delete/${contact.id }"
+						onclick="return confirm('Are you sure you want to delete?')">Delete</a>
 					</td>
 				</tr>
 			</c:forEach>

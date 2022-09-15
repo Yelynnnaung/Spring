@@ -2,6 +2,8 @@ package com.java.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ public class ContactController {
 	@Autowired
 	private ContactDao contactDao;
 
-	@RequestMapping(value = "/",method = RequestMethod.GET)
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String index(Model model) {
 		List<Contact> cList = contactDao.getList();
 		model.addAttribute("contactList", cList);
@@ -35,16 +37,20 @@ public class ContactController {
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String saveContact(@Valid @ModelAttribute Contact c, BindingResult br) {
-		if(br.hasErrors()){
+	public String saveContact(@Valid @ModelAttribute Contact c, BindingResult br,HttpServletRequest request) {
+		
+		if (br.hasErrors()) {
 			return "createOrupdate";
 		}
+
+		// Create or Update
 		if (c.getId() == null) {
 			contactDao.save(c);
+			request.getSession().setAttribute("message", "Insert Successful!");
 		} else {
 			contactDao.update(c);
+			request.getSession().setAttribute("message", "Update Successful!");
 		}
-
 		return "redirect:/";
 	}
 
